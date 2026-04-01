@@ -4,13 +4,15 @@ local PT = PingText
 
 PT.name = "PingText"
 PT.title = "Ping Text"
-PT.version = "1.4.1"
+PT.version = "1.4.2"
 PT.width = 320
 PT.height = 48
 PT.defaultFontSize = 18
 PT.fastUpdateIntervalMs = 50
 PT.currentModeSampleText = "Ping: 9999"
 PT.averageModeSampleText = "Ping: 9999 | Avg: 9999"
+PT.horizontalPadding = 18
+PT.verticalPadding = 16
 
 local defaults = {
     offsetX = 0,
@@ -138,8 +140,20 @@ end
 function PT:GetLayoutMetrics()
     local fontSize = math.max(14, math.floor(tonumber(self.saved and self.saved.fontSize) or PT.defaultFontSize))
     local sampleText = self:GetEffectiveDisplayMode() == "average_current" and self.averageModeSampleText or self.currentModeSampleText
-    local width = math.max(220, math.floor((string.len(sampleText) * fontSize * 0.72) + 44))
-    local height = math.max(36, fontSize + 20)
+    local width
+
+    if self.measureLabel then
+        self.measureLabel:SetFont(string.format("$(BOLD_FONT)|%d|soft-shadow-thick", fontSize))
+        self.measureLabel:SetText(sampleText)
+        local measuredWidth = select(1, self.measureLabel:GetTextDimensions())
+        width = math.floor((measuredWidth or 0) + self.horizontalPadding)
+    else
+        width = math.floor((string.len(sampleText) * fontSize * 0.60) + self.horizontalPadding)
+    end
+
+    local minimumWidth = self:GetEffectiveDisplayMode() == "average_current" and 170 or 110
+    width = math.max(minimumWidth, width)
+    local height = math.max(32, fontSize + self.verticalPadding)
     return width, height
 end
 
@@ -410,9 +424,16 @@ function PT:CreateUI()
     end)
     label:SetText("Ping: --")
 
+    local measureLabel = WINDOW_MANAGER:CreateControl(self.name .. "MeasureLabel", control, CT_LABEL)
+    measureLabel:SetHidden(true)
+    measureLabel:SetDimensions(1, 1)
+    measureLabel:SetFont(self:GetFontString())
+    measureLabel:SetText("")
+
     self.control = control
     self.dragSurface = dragSurface
     self.label = label
+    self.measureLabel = measureLabel
     self:ApplyAnchor()
     self:ApplyUnlockedState()
 end
