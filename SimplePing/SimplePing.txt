@@ -1,0 +1,8 @@
+## Title: SimplePing
+## Version: 1.1.0
+## APIVersion: 101049
+## Description: Simple ping display addon with color-coding and movable position
+## DependsOn: LibAddonMenu-2.0>=41
+## SavedVariables: SimplePingSavedVars
+
+SimplePing.lua

@@ -2,25 +2,21 @@
 
 Simple ESO addon that shows your latency as text on screen.
 
-## Features
-
-- Plain text ping display
-- Movable position
-- Color bands
-- Optional smoothing
-- Fast mode
-- Settings panel support with LibAddonMenu-2.0
-
 ## Install
 
-Copy the `PingText` folder into:
+Copy the `SimplePing` folder into:
 
-`Documents\Elder Scrolls Online\live\AddOns\`
+`Documents\\Elder Scrolls Online\\live\\AddOns\\`
 
 ## Commands
 
-- `/pingtext status`
-- `/pingtext fast`
-- `/pingtext unlock`
-- `/pingtext display <current|average>`
-- `/pingtext size <14-36>`
+- `/simpleping`
+- `/simpleping reset`
+- `/simpleping config`
+
+## Changes
+
+- shows `Ping:--` when latency is unavailable
+- keeps ping thresholds in a sane order
+- saves position on reload/logout
+- lock position disables dragging and mouse input
